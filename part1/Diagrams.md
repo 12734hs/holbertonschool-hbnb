@@ -100,21 +100,6 @@ participant API
 participant BusinessLogic
 participant Database
 
-User->>API: Register(user data)
-API->>BusinessLogic: validate_user_data()
-BusinessLogic->>Database: save_user()
-Database-->>BusinessLogic: confirmation
-BusinessLogic-->>API: return success
-API-->>User: registration success
-```
-## 3️⃣ Sequence Diagram(Review Submission)
-```mermaid
-sequenceDiagram
-participant User
-participant API
-participant BusinessLogic
-participant Database
-
 User->>API: CreatePlace(place data)
 API->>BusinessLogic: validate_place_data()
 BusinessLogic->>Database: save_place()
@@ -122,7 +107,7 @@ Database-->>BusinessLogic: confirmation
 BusinessLogic-->>API: return success
 API-->>User: place created
 ```
-## 3️⃣ Sequence Diagram(Fetching a List of Places)
+## 3️⃣ Sequence Diagram(Review Submission)
 ```mermaid
 sequenceDiagram
 participant User
@@ -137,7 +122,7 @@ Database-->>BusinessLogic: confirmation
 BusinessLogic-->>API: return success
 API-->>User: review submitted
 ```
-
+## 3️⃣ Sequence Diagram(Fetching a List of Places)
 ```mermaid
 sequenceDiagram
 participant User
