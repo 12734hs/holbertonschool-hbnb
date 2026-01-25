@@ -1,4 +1,4 @@
-classDiagram
+```classDiagram
 %% --- Presentation Layer ---
 class PresentationLayer {
     +UserService
@@ -30,3 +30,4 @@ class PersistenceLayer {
 %% --- Connections ---
 PresentationLayer --> BusinessLogicLayer : Facade Pattern
 BusinessLogicLayer --> PersistenceLayer : Database Operations
+```
