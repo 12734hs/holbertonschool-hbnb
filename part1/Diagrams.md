@@ -91,3 +91,63 @@ sequenceDiagram
     BusinessLogic-->>API: return success
     API-->>User: registration success
 ```
+
+```mermaid
+sequenceDiagram
+participant User
+participant API
+participant BusinessLogic
+participant Database
+
+User->>API: Register(user data)
+API->>BusinessLogic: validate_user_data()
+BusinessLogic->>Database: save_user()
+Database-->>BusinessLogic: confirmation
+BusinessLogic-->>API: return success
+API-->>User: registration success
+```
+
+```mermaid
+sequenceDiagram
+participant User
+participant API
+participant BusinessLogic
+participant Database
+
+User->>API: CreatePlace(place data)
+API->>BusinessLogic: validate_place_data()
+BusinessLogic->>Database: save_place()
+Database-->>BusinessLogic: confirmation
+BusinessLogic-->>API: return success
+API-->>User: place created
+```
+
+```mermaid
+sequenceDiagram
+participant User
+participant API
+participant BusinessLogic
+participant Database
+
+User->>API: SubmitReview(place_id, review_data)
+API->>BusinessLogic: validate_review()
+BusinessLogic->>Database: save_review()
+Database-->>BusinessLogic: confirmation
+BusinessLogic-->>API: return success
+API-->>User: review submitted
+```
+
+```mermaid
+sequenceDiagram
+participant User
+participant API
+participant BusinessLogic
+participant Database
+
+User->>API: GetPlaces(filters)
+API->>BusinessLogic: apply_filters()
+BusinessLogic->>Database: fetch_places()
+Database-->>BusinessLogic: places list
+BusinessLogic-->>API: return places
+API-->>User: display places
+```
