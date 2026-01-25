@@ -31,7 +31,7 @@ classDiagram
         +DatabaseOperations()
     }
     PresentationLayer --> BusinessLogicLayer : Facade Pattern
-    BusinessLogicLayer --> PersistenceLayer : Database Operations
+    BusinessLogicLayer --> PersistenceLayer : Database Operations```
 
 ```mermaid
 classDiagram
@@ -87,4 +87,4 @@ sequenceDiagram
     BusinessLogic->>Database: save_user()
     Database-->>BusinessLogic: confirmation
     BusinessLogic-->>API: return success
-    API-->>User: registration success
+    API-->>User: registration success```
