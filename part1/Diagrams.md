@@ -93,10 +93,10 @@ classDiagram
 
 This diagram shows the flow of registering a new user:
 
-1.User sends registration data to API
-1.API validates the data via Business Logic Layer
-1.Business Logic saves the user in the Database
-1.Confirmation is sent back through API to the User
+- User sends registration data to API
+- API validates the data via Business Logic Layer
+- Business Logic saves the user in the Database
+- Confirmation is sent back through API to the User
 
 ```mermaid
 sequenceDiagram
