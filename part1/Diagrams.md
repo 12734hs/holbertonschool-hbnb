@@ -1,6 +1,6 @@
 # HBnB Project Diagrams
 
-This file contains all diagramms for HBnb Project!
+This file contains all diagrams for HBnb Project!
 ---
 
 ## 1️⃣ High-Level Package Diagram
