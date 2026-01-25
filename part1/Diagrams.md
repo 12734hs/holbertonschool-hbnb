@@ -43,6 +43,7 @@ classDiagram
     %% --- Connections ---
     PresentationLayer --> BusinessLogicLayer : Facade Pattern
     BusinessLogicLayer --> PersistenceLayer : Database Operations
+
 ```mermaid
 classDiagram
     %% --- User ---
