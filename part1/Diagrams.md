@@ -1,4 +1,10 @@
-```classDiagram
+# HBnB Project Diagrams
+
+
+## 1️⃣ High-Level Package Diagram
+
+```mermaid
+classDiagram
 %% --- Presentation Layer ---
 class PresentationLayer {
     +UserService
@@ -30,4 +36,3 @@ class PersistenceLayer {
 %% --- Connections ---
 PresentationLayer --> BusinessLogicLayer : Facade Pattern
 BusinessLogicLayer --> PersistenceLayer : Database Operations
-```
