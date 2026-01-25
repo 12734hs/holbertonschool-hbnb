@@ -1,9 +1,6 @@
 # HBnB Project Diagrams
 
-Этот файл содержит все диаграммы для проекта **HBnB**:  
-- Пакетная диаграмма высокого уровня  
-- Диаграмма классов бизнес-логики  
-- Диаграммы последовательности для API вызовов  
+Этот файл содержит все диаграммы для проекта HBnB.
 
 ---
 
@@ -12,7 +9,6 @@
 ```mermaid
 classDiagram
     direction TB
-    %% --- Presentation Layer ---
     class PresentationLayer {
         +UserService
         +PlaceService
@@ -20,8 +16,6 @@ classDiagram
         +AmenityService
         +API Endpoints
     }
-
-    %% --- Business Logic Layer ---
     class BusinessLogicLayer {
         +User
         +Place
@@ -30,8 +24,6 @@ classDiagram
         +validate_user()
         +calculate_rating()
     }
-
-    %% --- Persistence Layer ---
     class PersistenceLayer {
         +UserRepository
         +PlaceRepository
@@ -39,14 +31,11 @@ classDiagram
         +AmenityRepository
         +DatabaseOperations()
     }
-
-    %% --- Connections ---
     PresentationLayer --> BusinessLogicLayer : Facade Pattern
     BusinessLogicLayer --> PersistenceLayer : Database Operations
 
 ```mermaid
 classDiagram
-    %% --- User ---
     class User {
         +UUID id
         +string name
@@ -57,8 +46,6 @@ classDiagram
         +register()
         +login()
     }
-
-    %% --- Place ---
     class Place {
         +UUID id
         +string name
@@ -70,8 +57,6 @@ classDiagram
         +add_review(review)
         +calculate_rating()
     }
-
-    %% --- Review ---
     class Review {
         +UUID id
         +User user
@@ -81,8 +66,6 @@ classDiagram
         +datetime created_at
         +datetime updated_at
     }
-
-    %% --- Amenity ---
     class Amenity {
         +UUID id
         +string name
@@ -90,22 +73,7 @@ classDiagram
         +datetime created_at
         +datetime updated_at
     }
-
-    %% --- Relationships ---
     User "1" -- "0..*" Place : owns
     Place "1" -- "0..*" Review : has
     User "1" -- "0..*" Review : writes
     Place "0..*" -- "0..*" Amenity : provides
-```mermaid
-sequenceDiagram
-    participant User
-    participant API
-    participant BusinessLogic
-    participant Database
-
-    User->>API: Register(user data)
-    API->>BusinessLogic: validate_user_data()
-    BusinessLogic->>Database: save_user()
-    Database-->>BusinessLogic: confirmation
-    BusinessLogic-->>API: return success
-    API-->>User: registration success
