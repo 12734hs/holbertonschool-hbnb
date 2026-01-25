@@ -31,7 +31,8 @@ classDiagram
         +DatabaseOperations()
     }
     PresentationLayer --> BusinessLogicLayer : Facade Pattern
-    BusinessLogicLayer --> PersistenceLayer : Database Operations```
+    BusinessLogicLayer --> PersistenceLayer : Database Operations
+```
 
 ```mermaid
 classDiagram
