@@ -77,7 +77,8 @@ classDiagram
     Place "1" -- "0..*" Review : has
     User "1" -- "0..*" Review : writes
     Place "0..*" -- "0..*" Amenity : provides
-
+```
+```mermaid
 sequenceDiagram
     participant User
     participant API
@@ -88,4 +89,5 @@ sequenceDiagram
     BusinessLogic->>Database: save_user()
     Database-->>BusinessLogic: confirmation
     BusinessLogic-->>API: return success
-    API-->>User: registration success```
+    API-->>User: registration success
+```
