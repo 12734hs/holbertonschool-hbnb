@@ -1,6 +1,4 @@
 from app.models import BaseModel
-from app.models.review import Review
-from app.models.amenitiy import Amenity
 from app.models.user import User
 
 class Place(BaseModel):
@@ -14,6 +12,7 @@ class Place(BaseModel):
         self.owner = owner
         self.reviews = []  # List to store related reviews
         self.amenities = []  # List to store related amenities
+        super().save()
 
     @property
     def title(self):
@@ -23,7 +22,6 @@ class Place(BaseModel):
     def title(self, new_text):
         if isinstance(new_text, str) and 100 >= len(new_text) > 0:
             self._title = new_text
-            super().save()
         else:
             raise ValueError('Invalid Text Format')
 
@@ -35,7 +33,6 @@ class Place(BaseModel):
     def description(self, value):
         if value is None or isinstance(value, str):
             self._description = value
-            self.save()
         else:
             raise ValueError('Description must be a string or None')
 
@@ -46,9 +43,8 @@ class Place(BaseModel):
 
     @price.setter
     def price(self, new_value):
-        if isinstance(new_value, (float, int)) and new_value > 0:
+        if isinstance(new_value, (float, int)) and new_value >= 0:
             self._price = new_value
-            super().save()
         else:
             raise ValueError('Invalid Price Format')
 
@@ -61,7 +57,6 @@ class Place(BaseModel):
     def latitude(self, new_value):
         if isinstance(new_value, (int, float)) and 90 >= new_value >= -90:
             self._latitude = new_value
-            super().save()
         else:
             raise ValueError('Invalid Latitude Format')
 
@@ -74,7 +69,6 @@ class Place(BaseModel):
     def longitude(self, new_value):
         if isinstance(new_value, (int, float)) and 180 >= new_value >= -180:
             self._longitude = new_value
-            super().save()
         else:
             raise ValueError('Invalid Longitude Format')
 
@@ -87,7 +81,6 @@ class Place(BaseModel):
     def owner(self, new_owner):
         if isinstance(new_owner, User):
             self._owner = new_owner
-            super().save()
         else:
             raise ValueError('Invalid Owner Object')
 

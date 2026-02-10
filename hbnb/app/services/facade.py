@@ -1,12 +1,15 @@
 from app.persistence.facade import InMemoryRepository
 from app.models.user import User
 from app.models.amenitiy import Amenity
+from app.models.place import Place
+
 
 
 class HBnBFacade:
     def __init__(self):
         self.user_repo = InMemoryRepository()
         self.amenity_repo = InMemoryRepository()
+        self.place_repo = InMemoryRepository()
 
     def create_user(self, user_data):
         user = User(**user_data)
@@ -50,3 +53,51 @@ class HBnBFacade:
 
         self.amenity_repo.update(amenity_id, amenity_data)
         return amenity
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+    def create_place(self, place_data):
+        owner = self.get_user(place_data['owner_id'])
+        if not owner:
+            raise ValueError("Owner Didn't Found")
+        new_place = Place(
+            title=place_data['title'],
+            description=place_data.get('description'),
+            price=place_data['price'],
+            latitude=place_data['latitude'],
+            longitude=place_data['longitude'],
+            owner=owner
+        )
+
+        amenity_ids = place_data.get('amenities', [])
+        if isinstance(amenity_ids, list):
+            for aid in amenity_ids:
+                checker = self.get_amenity(aid)
+                if checker:
+                    new_place.add_amenity(aid)
+                else:
+                    raise ValueError(f"Amenity {aid} didn't found in list of amenities")
+
+        self.place_repo.add(new_place)
+        return new_place
+
+    def get_place(self, place_id):
+        return self.place_repo.get(place_id)
+
+    def get_all_places(self):
+        return self.place_repo.get_all()
+
+    def update_place(self, place_id, place_data):
+        place = self.get_place(place_id)
+        if not place:
+            return None
+        if 'title' in place_data:
+            place.title = place_data['title']
+        if 'description' in place_data:
+            place.description = place_data['description']
+        if 'price' in place_data:
+            place.price = place_data['price']
+
+        return place
+
+# ----------------------------------------------------------------------------------------------------------------------
