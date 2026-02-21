@@ -1,5 +1,4 @@
 from app.models import BaseModel
-from app import bcrypt 
 
 class User(BaseModel):
     def __init__(self, first_name, last_name, email, password, is_admin=False):
@@ -9,7 +8,7 @@ class User(BaseModel):
         self.last_name = last_name
         self.email = email
         self.is_admin = is_admin
-        self.password = _password
+        self.password = password
 
     @property
     def first_name(self):
@@ -63,9 +62,15 @@ class User(BaseModel):
     def password(self):
         return self._password
 
-    def hash_password(self):
-        self.password = bcrypt.generate_password_hash(password).decode('utf-8')
+    @password.setter
+    def password(self, password):
+        from app import bcrypt_pr
+
+        if not password or not isinstance(password, str):
+            raise ValueError("Password must be a non-empty string")
+        self._password = bcrypt_pr.generate_password_hash(password).decode('utf-8')
 
     def verify_password(self, password):
+        from app import bcrypt_pr
         """Verifies if the provided password matches the hashed password."""
-        return bcrypt.check_password_hash(self.password, password)
+        return bcrypt_pr.check_password_hash(self.password, password)

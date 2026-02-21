@@ -6,7 +6,7 @@ api = Namespace('users', description='User operations')
 user_model = api.model('User', {
     'first_name': fields.String(required=True, description='First name of the user'),
     'last_name': fields.String(required=True, description='Last name of the user'),
-    'email': fields.String(required=True, description='Email of the user')
+    'email': fields.String(required=True, description='Email of the user'),
 })
 
 @api.route('/')
@@ -24,9 +24,7 @@ class UserList(Resource):
         new_user = facade.create_user(user_data)
         return {
             'id': new_user.id,
-            'first_name': new_user.first_name,
-            'last_name': new_user.last_name,
-            'email': new_user.email
+            'message': 'User successfully created'
         }, 201
 
     @api.response(200, 'List of users retrieved successfully')
