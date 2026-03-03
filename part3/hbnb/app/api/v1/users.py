@@ -1,17 +1,39 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 api = Namespace('users', description='User operations')
 
 user_model = api.model('User', {
     'first_name': fields.String(required=True, description='First name of the user'),
     'last_name': fields.String(required=True, description='Last name of the user'),
-    'email': fields.String(required=True, description='Email of the user'),
+    'email': fields.String(required=True, description='Email of the user')
 })
+
+user_model_updated = api.model('UserReg', {
+    'first_name': fields.String(required=True, description='First name of the user'),
+    'last_name': fields.String(required=True, description='Last name of the user'),
+    'email': fields.String(required=True, description='Email of the user'),
+    'password': fields.String(required=True, description='Password of the user')
+})
+
+@api.route('/protected')
+class ProtectedResource(Resource):
+    @jwt_required()
+    def get(self):
+         """A protected endpoint that requires a valid JWT token"""
+         print("jwt------")
+         print(get_jwt_identity())
+         current_user = get_jwt_identity() # Retrieve the user's identity from the token
+         #if you need to see if the user is an admin or not, you can access additional claims using get_jwt() :
+         # additional claims = get_jwt()
+         #additional claims["is_admin"] -> True or False
+         return {'message': f'Hello, user {current_user}'}, 200
+
 
 @api.route('/')
 class UserList(Resource):
-    @api.expect(user_model, validate=True)
+    @api.expect(user_model_updated, validate=True)
     @api.response(201, 'User successfully created')
     @api.response(400, 'Email already registered')
     def post(self):
@@ -58,9 +80,19 @@ class UserResource(Resource):
     @api.response(200, 'User successfully updated')
     @api.response(404, 'User not found')
     @api.response(400, 'Invalid input data')
+    @jwt_required()
     def put(self, user_id):
-        """Update user information"""
+        current_user = get_jwt_identity()
         user_data = api.payload
+
+        # Checking
+        if str(current_user) != str(user_id):
+            return {'error': 'Unauthorized action'}, 403
+
+        if 'email' in user_data or 'password' in user_data:
+            return {'error': 'You cannot modify email or password'}, 400
+
+        """Update user information"""
         updated_user = facade.update_user(user_id, user_data)
         if not updated_user:
             return {'error': 'User not found'}, 404
