@@ -10,7 +10,7 @@ class MakeMeAdmin(Resource):
     """
     DEV ONLY!
     Promote the currently logged-in user to admin.
-    You MUST login again to get an admin token.
+    You MUST Login again to get an admin token.
     """
     @jwt_required()
     def post(self):
