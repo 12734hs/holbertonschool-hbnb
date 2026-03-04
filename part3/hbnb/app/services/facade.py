@@ -1,4 +1,4 @@
-from app.persistence.facade import InMemoryRepository
+from app.persistence.repository import SQLAlchemyRepository
 from app.models.user import User
 from app.models.amenitiy import Amenity
 from app.models.place import Place
@@ -8,10 +8,10 @@ from app.models.review import Review
 
 class HBnBFacade:
     def __init__(self):
-        self.user_repo = InMemoryRepository()
-        self.amenity_repo = InMemoryRepository()
-        self.place_repo = InMemoryRepository()
-        self.reviews_repo = InMemoryRepository()
+        self.user_repo = SQLAlchemyRepository(User)
+        self.amenity_repo = SQLAlchemyRepository(Amenity)
+        self.place_repo = SQLAlchemyRepository(Place)
+        self.reviews_repo = SQLAlchemyRepository(Review)
 
     def create_user(self, user_data):
         user = User(**user_data)
@@ -62,6 +62,7 @@ class HBnBFacade:
         owner = self.get_user(place_data['owner_id'])
         if not owner:
             raise ValueError("Owner Didn't Found")
+
         new_place = Place(
             title=place_data['title'],
             description=place_data.get('description'),
