@@ -45,7 +45,7 @@ class ReviewList(Resource):
                 'id': new_review.id,
                 'text': new_review.text,
                 'rating': new_review.rating,
-                'user_id': new_review.user.id,
+                'user_id': new_review.author.id,
                 'place_id': new_review.place.id
             }, 201
         except ValueError as e:

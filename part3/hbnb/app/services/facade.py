@@ -1,5 +1,7 @@
-from app.persistence.repository import SQLAlchemyRepository
 from app.services.repositories.user_repository import UserRepository
+from app.services.repositories.place_repository import PlaceRepository
+from app.services.repositories.review_repository import ReviewRepository
+from app.services.repositories.amenity_repository import AmenityRepository
 from app.models.user import User
 from app.models.amenitiy import Amenity
 from app.models.place import Place
@@ -10,9 +12,9 @@ from app.models.review import Review
 class HBnBFacade:
     def __init__(self):
         self.user_repo = UserRepository()
-        self.amenity_repo = SQLAlchemyRepository(Amenity)
-        self.place_repo = SQLAlchemyRepository(Place)
-        self.reviews_repo = SQLAlchemyRepository(Review)
+        self.amenity_repo = AmenityRepository()
+        self.place_repo = PlaceRepository()
+        self.reviews_repo = ReviewRepository()
 
     def create_user(self, user_data):
         user = User(**user_data)
@@ -45,7 +47,7 @@ class HBnBFacade:
         return amenity
 
     def get_amenity(self, amenity_id):
-        return self.amenity_repo.get(amenity_id)
+        return self.amenity_repo.get_amenity_by_id(amenity_id)
 
     def get_all_amenities(self):
         return self.amenity_repo.get_all()
@@ -79,7 +81,7 @@ class HBnBFacade:
             for aid in amenity_ids:
                 checker = self.get_amenity(aid)
                 if checker:
-                    new_place.add_amenity(aid)
+                    new_place.amenities.append(checker)
                 else:
                     raise ValueError(f"Amenity {aid} didn't found in list of amenities")
 
@@ -87,7 +89,7 @@ class HBnBFacade:
         return new_place
 
     def get_place(self, place_id):
-        return self.place_repo.get(place_id)
+        return self.place_repo.get_place_by_id(place_id)
 
     def get_all_places(self):
         return self.place_repo.get_all()
@@ -107,31 +109,56 @@ class HBnBFacade:
 
 # ----------------------------------------------------------------------------------------------------------------------
 
+    # def create_review(self, review_data):
+    #     user = self.get_user(review_data['user_id'])
+    #     place = self.get_place(review_data['place_id'])
+    #
+    #     if user and place:
+    #         new_review = Review(
+    #             text=review_data['text'],
+    #             rating=review_data['rating'],
+    #             user=user,
+    #             place=place
+    #         )
+    #
+    #         self.reviews_repo.add(new_review)
+    #         place.reviews.append(new_review)
+    #
+    #         return new_review
+    #     else:
+    #         raise ValueError('User or Place not found')
+
     def create_review(self, review_data):
-        user = self.get_user(review_data['user_id'])
-        place = self.get_place(review_data['place_id'])
+        # Получаем данные безопасно
+        text = review_data.get('text')
+        rating = review_data.get('rating')
+        user_id = review_data.get('user_id')
+        place_id = review_data.get('place_id')
 
-        if user and place:
-            new_review = Review(
-                text=review_data['text'],
-                rating=review_data['rating'],
-                user=user,
-                place=place
-            )
-            # 1. Добавляем в общую базу отзывов
-            self.reviews_repo.add(new_review)
+        # Логируем для отладки (потом можно удалить)
+        print(f"DEBUG: received text={text}, rating={rating}, user_id={user_id}")
 
-            # 2. СВЯЗЫВАЕМ: Добавляем этот отзыв в список внутри самого места
-            # Это позволит методу GET /places/<id>/reviews увидеть этот отзыв
-            place.reviews.append(new_review)
+        if not text:
+            raise ValueError("Review text is required")
 
-            return new_review
-        else:
+        user = self.get_user(user_id)
+        place = self.get_place(place_id)
+
+        if not user or not place:
             raise ValueError('User or Place not found')
 
+        new_review = Review(
+            text=text,
+            rating=rating,
+            author=user,  # Убедись, что в модели Review связь называется author
+            place=place
+        )
+
+        self.reviews_repo.add(new_review)
+        return new_review
 
     def get_review(self, review_id):
-        return self.reviews_repo.get(review_id)
+        return self.reviews_repo.get_review_by_id(review_id)
 
     def get_all_reviews(self):
         return self.reviews_repo.get_all()
