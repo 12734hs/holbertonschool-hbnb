@@ -151,5 +151,5 @@ class PlaceReviewList(Resource):
             'id': review.id,
             'text': review.text,
             'rating': review.rating,
-            'user_id': review.user.id
+            'user_id': review.author.id
         } for review in place.reviews], 200

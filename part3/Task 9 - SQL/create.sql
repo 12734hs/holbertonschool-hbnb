@@ -36,12 +36,3 @@ CREATE TABLE Place_Amenity(
     amenity_id CHAR(36) REFERENCES Amenity(id),
     PRIMARY KEY(place_id, amenity_id)
 );
-
-INSERT INTO User VALUES
-('36c9050e-ddd3-4c3b-9731-9f487208bbc1', 'Admin', 'HBnB',
-'admin@hbnb.io', '$2a$12$gwsY56ZSv7GtxyjHoLgjs.RwEwmwHbjVbMWENLAN72PrgALLiatnG', 1);
-
-INSERT INTO Amenity VALUES
-    ('550e8400-e29b-41d4-a716-446655440000', 'WiFi'),
-    ('678e8400-e29b-41d4-a716-446655440001', 'Swimming Pool'),
-    ('789e8400-e29b-41d4-a716-446655440002', 'Air Conditioning');

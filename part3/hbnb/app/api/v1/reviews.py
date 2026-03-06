@@ -60,7 +60,7 @@ class ReviewList(Resource):
                 'id': review.id,
                 'text': review.text,
                 'rating': review.rating,
-                'user_id': review.user.id,
+                'user_id': review.author.id,
                 'place_id': review.place.id
             } for review in data
         ]
@@ -85,7 +85,7 @@ class ReviewResource(Resource):
             'id': data.id,
             'text': data.text,
             'rating': data.rating,
-            'user_id': data.user.id,
+            'user_id': data.author.id,
             'place_id': data.place.id
         }, 200
     @api.expect(review_model)
@@ -106,7 +106,7 @@ class ReviewResource(Resource):
         # Checking guys
         if not review:
             return {'error': 'Review not found'}, 404
-        if not is_admin and str(current_user) != str(review.user.id):
+        if not is_admin and str(current_user) != str(review.author.id):
             return {'error': 'Unauthorized action.'}, 403
 
         #creating
@@ -131,7 +131,7 @@ class ReviewResource(Resource):
         #checking
         if not review:
             return {'error': 'Review not found'}, 404
-        if not is_admin and str(current_user) != str(review.user.id):
+        if not is_admin and str(current_user) != str(review.author.id):
             return {'error': 'Unauthorized action.'}, 403
 
         """Delete a review"""

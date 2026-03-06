@@ -98,35 +98,19 @@ class HBnBFacade:
         place = self.get_place(place_id)
         if not place:
             return None
-        if 'title' in place_data:
-            place.title = place_data['title']
-        if 'description' in place_data:
-            place.description = place_data['description']
-        if 'price' in place_data:
-            place.price = place_data['price']
+
+        update_dict = {}
+        for field in ['title', 'description', 'price', 'latitude', 'longitude']:
+            if field in place_data:
+                update_dict[field] = place_data[field]
+                # Сразу обновляем объект в памяти для возврата корректного ответа
+                setattr(place, field, place_data[field])
+
+        self.place_repo.update(place_id, update_dict)
 
         return place
 
 # ----------------------------------------------------------------------------------------------------------------------
-
-    # def create_review(self, review_data):
-    #     user = self.get_user(review_data['user_id'])
-    #     place = self.get_place(review_data['place_id'])
-    #
-    #     if user and place:
-    #         new_review = Review(
-    #             text=review_data['text'],
-    #             rating=review_data['rating'],
-    #             user=user,
-    #             place=place
-    #         )
-    #
-    #         self.reviews_repo.add(new_review)
-    #         place.reviews.append(new_review)
-    #
-    #         return new_review
-    #     else:
-    #         raise ValueError('User or Place not found')
 
     def create_review(self, review_data):
         # Получаем данные безопасно
@@ -173,6 +157,8 @@ class HBnBFacade:
 
         review.text = review_data.get('text', review.text)
         review.rating = review_data.get('rating', review.rating)
+
+        self.reviews_repo.update(review_id, review_data)
         return review
 
     def delete_review(self, review_id):

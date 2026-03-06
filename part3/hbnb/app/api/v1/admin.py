@@ -50,4 +50,10 @@ class AdminUserResource(Resource):
         if not updated_user:
             return {'error': 'user not found'}, 404
 
-        return updated_user, 200
+        return {
+            'id': updated_user.id,
+            'first_name': updated_user.first_name,
+            'last_name': updated_user.last_name,
+            'email': updated_user.email,
+            'is_admin': updated_user.is_admin
+        }, 200
